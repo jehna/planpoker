@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html manifest="app.php">
+<head>
+	<title>JPlanPoker</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+	<link rel="apple-touch-icon" href="images/icon.png"/>
+	<link rel="apple-touch-startup-image" href="images/startup.png">
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			// Create numbers
+			(function() {
+				var numbers = [1,2,3,5,8,13];
+				var margin = 0.05; // percent
+				var font = 0.65; // percent of card
+				var $parent = $("#content");
+				
+				var wHeight = $parent.height();
+				var marginHeight = wHeight * margin;
+				var cardHeight = wHeight - (marginHeight*2);
+				var cardWidth = cardHeight / 4 * 3;
+				var fontHieght = cardHeight * font;
+				var fontMargin = (cardHeight - fontHieght) / 3;
+				
+				var card = function(content) {
+					$di = $("<div></div>");
+					$di.text(content);
+					$di.addClass("number-inner");
+					$d = $("<div></div>");
+					$d.append($di);
+					$d.addClass("number");
+					return $d;
+				};
+				
+				var $hiddenCard = new card(0);
+				$hiddenCard.appendTo("body").css({"margin-left": "auto", "margin-right": "auto", "display": "table"}).hide().click(function(e) {
+					$parent.show();
+					$hiddenCard.hide();
+				});
+				var onCardClick = function(e) {
+					$parent.hide();
+					$hiddenCard.show();
+					$hiddenCard.children().text($(e.target).text());
+				}
+				
+				$parent.css("width", (cardWidth + (marginHeight * 2)) * numbers.length);
+				$("<style>.number { height: "+cardHeight+"px; width: "+cardWidth+"px; margin: "+marginHeight+"px; font-size: "+fontHieght+"px; } .number-inner { margin: "+fontMargin+"px 0 0 0; }</style>").appendTo("head");
+				for(var i in numbers) { var number = numbers[i]
+					$d = new card(number);
+					$d.click(onCardClick);
+					$parent.append($d);
+				}
+				
+			})();
+		
+			// Enable scrolling
+			(function() {
+				var left = 0;
+				var $content = $("#content");
+				var $body = $("body");
+				var maxLeft = $content.width();
+				
+				var move = function(event) {
+					event.preventDefault();
+					var l = left + event.targetTouches[0].pageX;
+					l = Math.min(l, maxLeft);
+					$content.css('left', l);
+					$body.css("background-position", l/3 + 'px 0');
+				};
+				var start = function(event) {
+					//event.preventDefault();
+					left = $content.offset().left - event.targetTouches[0].pageX;
+				};
+				
+				document.ontouchstart = start;
+				document.ontouchmove = move;
+			})();
+			
+		});
+	</script>
+</head>
+
+<body>
+	<div id="content"></div>
+</body>
+
+</html>
