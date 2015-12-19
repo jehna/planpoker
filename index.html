@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html manifest="app.php">
+<html manifest="app.manifest">
 <head>
 	<title>JPlanPoker</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -22,7 +22,7 @@
 				var wHeight = $parent.height();
 				var marginHeight = wHeight * margin;
 				var cardHeight = wHeight - (marginHeight*2);
-				var cardWidth = cardHeight / 4 * 3;
+				var cardWidth = Math.min(cardHeight / 4 * 3, $parent.parent().width() - margin * 2);
 				var fontHieght = cardHeight * font;
 				var fontMargin = (cardHeight - fontHieght) / 3;
 				
@@ -68,8 +68,8 @@
 					event.preventDefault();
 					var l = left + event.targetTouches[0].pageX;
 					l = Math.min(l, maxLeft);
-					$content.css('left', l);
-					$body.css("background-position", l/3 + 'px 0');
+					$content.css('transform', 'translate3d(' + l + 'px, 0, 0');
+					//$body.css("background-position", l/3 + 'px 0');
 				};
 				var start = function(event) {
 					//event.preventDefault();
